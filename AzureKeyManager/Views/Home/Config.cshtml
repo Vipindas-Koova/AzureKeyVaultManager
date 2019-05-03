@@ -1,0 +1,55 @@
+@model AzureKeyManager.core.AzureKeyManager
+
+@if (@ViewData["Error"] != null)
+{
+    <script type="text/javascript">
+        alert('@ViewData["Error"]');
+    </script>
+}
+
+@using (Html.BeginForm("Config", "Home", FormMethod.Post))
+{
+    <div class="table-responsive">
+        <table class="table" align="center">
+            <thead class="thead-dark">
+                <tr>
+                    <td style="font-weight: bold" colspan="4" align="center">Configuration Details</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td><td></td>
+                    <td>Client ID: </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.ClientID, new { style = "width:30em;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td>Secret Key: </td>
+                    <td>
+                        @Html.PasswordFor(m => m.SecretKey, new {style ="width:30em;", value = Model.SecretKey })
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td>Tenant ID: </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.TenantID, new { style = "width:30em;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td>URI: </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.URi, new { style = "width:30em;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="center"><input type="submit" value="Submit" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

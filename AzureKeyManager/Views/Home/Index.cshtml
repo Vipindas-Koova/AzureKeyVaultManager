@@ -1,0 +1,8 @@
+﻿@if (@ViewData["Success"] != null)
+{
+    <script type="text/javascript">
+        alert('@ViewData["Success"]');
+        
+    </script>
+    ViewData["Success"] = "";
+}

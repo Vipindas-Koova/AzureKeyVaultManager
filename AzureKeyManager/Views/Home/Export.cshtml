@@ -1,0 +1,54 @@
+﻿@model IEnumerable<AzureKeyManager.core.DataList>
+
+<table class="table table-bordered table-hover" align="center">
+    <thead class="thead-dark">
+        <tr>
+            <td colspan="2" align="center">
+                <button id="save-dialog" class="btn">Export</button>
+                <script>
+    (function(){
+        const { ipcRenderer } = require('electron')
+        const fs = require('fs');
+        var model = '@Html.Raw(Json.Serialize(Model))';
+
+        document.getElementById("save-dialog")
+                .addEventListener("click", () => {
+            ipcRenderer.send("save-dialog");
+        });
+
+        ipcRenderer.on("save-dialog-reply", (sender, path) => {
+            if (!path) return;
+
+            fs.writeFile(path, model, function (err) {
+                console.log(err);
+                return;
+            });
+            alert("File Saved Successfully");
+            window.location.href = '@Url.Action("Index","Home")';
+            
+        });
+                    }());
+                    
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">Secret Name</th>
+            <th scope="col">Secret Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.secretname
+                </td>
+                <td>
+                    @item.secrettype
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

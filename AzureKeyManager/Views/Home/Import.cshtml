@@ -1,0 +1,51 @@
+﻿@model AzureKeyManager.core.AzureKeyManager
+
+@if (@ViewData["Message"] != null)
+{
+    <script type="text/javascript">
+        alert('@ViewData["Message"]');
+    </script>
+}
+
+@using (Html.BeginForm("Importfile", "Home", FormMethod.Post))
+{
+    <table class="table-condensed" align="center">
+        <thead>
+            <tr>
+                <td style="font-weight: bold" align="center">Importing Secrets into Key Vault</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    URI: @Html.TextBoxFor(m => m.URi, new { style = "width:30em;" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    File: @Html.TextBoxFor(m => m.file, new { id = "readFile", style = "width:30em;" })
+                    <script>
+                        (function () {
+                            const { ipcRenderer } = require('electron')
+                            const fs = require('fs');
+
+
+                            document.getElementById("readFile")
+                                .addEventListener("click", () => {
+                                    ipcRenderer.send("open-dialog");
+                                });
+
+                            ipcRenderer.on("open-dialog-reply", (sender, path) => {
+                                if (!path) return;
+                                document.getElementById("readFile").value = path;
+                            });
+                        }());
+                    </script>
+                </td>
+            </tr>
+            <tr align="center">
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </tbody>
+    </table>
+}

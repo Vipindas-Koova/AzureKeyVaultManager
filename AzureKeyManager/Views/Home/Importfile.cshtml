@@ -1,0 +1,43 @@
+﻿@model List<AzureKeyManager.core.DataList>
+
+@if (@ViewData["Error"] != null)
+{
+    <script type="text/javascript">
+        alert('@ViewData["Error"]');
+    </script>
+}
+
+@using (Html.BeginForm("Loadfile", "Home", FormMethod.Post))
+{
+    <table class="table table-bordered table-hover" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Key Vault Name</th>
+                <th scope="col">Secret Name</th>
+                <th scope="col">Secret Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.TextBoxFor(m => m[i].secrettype)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m[i].secretname)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m[i].secretvalue)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" align="center">
+                    <input type="submit" value="Submit" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
