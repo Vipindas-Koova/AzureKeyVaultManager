@@ -1,0 +1,85 @@
+<div class="card m-3">
+  <h5 class="card-header">Enter Credentials</h5>
+  <div class="card-body">
+      <form [formGroup]="credentialsForm">
+          <div class="form-row">
+              <div class="form-group col-6">
+                  <label>Client ID</label>
+                  <input type="text" formControlName="clientID" class="form-control" [ngClass]="{'alert alert-danger': credentialsForm.get('clientID').hasError('required')}"/>
+                      <span *ngIf="credentialsForm.get('clientID').hasError('required')" class="text-danger">Client ID is required</span>
+          </div>
+              <div class="form-group col-6">
+                  <label>Tenant ID</label>
+                  <input type="text" formControlName="tenantID" class="form-control" [ngClass]="{'alert alert-danger': credentialsForm.get('tenantID').hasError('required')}" />
+                      <span *ngIf="credentialsForm.get('tenantID').hasError('required')"  class="text-danger">TenantID is required
+                  </span>
+              </div>
+              <div class="form-group col-6">
+                <label>keyVault Base Url</label>
+                <input type="text" formControlName="keyVaultBaseUrl" class="form-control" [ngClass]="{'alert alert-danger': credentialsForm.get('keyVaultBaseUrl').hasError('required')}" />
+                    <span *ngIf="credentialsForm.get('keyVaultBaseUrl').hasError('required')" class="text-danger">keyVault Base Url is required</span>
+            </div>
+            <div class="form-group col-6">
+              <label>Secret Key</label>
+              <input type="text" formControlName="secretKey" class="form-control" [ngClass]="{'alert alert-danger': credentialsForm.get('secretKey').hasError('required')}" />
+                  <span *ngIf="credentialsForm.get('secretKey').hasError('required')" class="text-danger">Secret Key is required</span>
+          </div>
+          </div>          
+      </form>
+  </div>
+</div>
+
+<div class="card m-3">
+    <h5 class="card-header">Export Secrets</h5>
+    <div class="card-body">
+            <div class="form-row">             
+                <div class="text-center">
+                    <button class="btn btn-primary mr-1" [disabled]="!credentialsForm.valid"  (click)="exportSecrets()">Export Secrets</button>
+                    <!-- <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button> -->
+                </div>
+                <table class="table" *ngIf="exportedSecrets.length" >
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Secret Name</th>
+                            <th>Secret Type</th>
+                            <th>Secret Value</th>
+                    </thead>
+                    <tbody>
+                      <tr  *ngFor="let item of exportedSecrets; let i = index">
+                          <td>{{item.secretname}}</td>
+                          <td>{{item.secrettype}}</td>
+                          <td>{{item.secretvalue}}</td>
+                      </tr>	      
+                    </tbody>
+                  </table>
+            </div>
+    </div>
+  </div>
+<div class="card m-3">
+  <h5 class="card-header">Import Secrets</h5>
+  <div class="card-body">
+          <div class="form-row">             
+            <div class="form-group col-5">
+              <input type="file" id="file" accept="application/JSON" [disabled]="!credentialsForm.valid" (change)="selectFile($event.target.files)">
+          </div>
+          <table class="table" *ngIf="secretFileData.length" >
+            <thead class="thead-light">
+                <tr>
+                    <th>Secret Name</th>
+                    <th>Secret Type</th>
+                    <th>Secret Value</th>
+            </thead>
+            <tbody>
+              <tr  *ngFor="let item of secretFileData; let i = index">
+                  <td>{{item.secretname}}</td>
+                  <td>{{item.secrettype}}</td>
+                  <td>{{item.secretvalue}}</td>
+              </tr>	      
+            </tbody>
+          </table>
+          <div class="form-group col-5" *ngIf="secretFileData.length">
+            <button class="btn btn-primary mr-1" [disabled]="!(credentialsForm.valid && secretFileData.length > 0)" (click)="importSecrets()">Import Secrets</button>
+              </div>
+              </div>
+  </div>
+</div>

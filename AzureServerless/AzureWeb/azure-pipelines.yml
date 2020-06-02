@@ -1,0 +1,50 @@
+trigger:
+  branches:
+    include:
+    - master
+variables:
+- name: azureSubscription
+  value: 
+- name: storage
+  value: 
+- name: ContainerName
+  value: $web
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      vmImage: windows-latest
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: 10.x
+      displayName: Install Node.js
+    - task: CmdLine@2
+      displayName: npm install -g @angular/cli
+      inputs:
+        script: >
+          npm install -g @angular/cli
+    - task: CmdLine@2
+      displayName: npm install
+      inputs:
+        script: >
+          npm install
+    - task: CmdLine@2
+      displayName: ng build --prod
+      inputs:
+        script: >
+          npm run build
+    - task: CmdLine@2
+      displayName: list cwd contents (verify build)
+      inputs:
+        script: >
+          dir
+    - task: AzureFileCopy@3
+      inputs:
+        SourcePath: $(System.DefaultWorkingDirectory)/dist
+        azureSubscription: $(azureSubscription)
+        Destination: AzureBlob
+        storage: $(storage)
+        ContainerName: $(ContainerName)
+        cleanTargetBeforeCopy: true
