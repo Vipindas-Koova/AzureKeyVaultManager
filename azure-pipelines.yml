@@ -8,16 +8,32 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: ''
+  azureSubscription: 'a3108991-8538-4228-ad58-1b9ed45653af'
 
   # Function app name
-  functionAppName: ''
+  functionAppName: 'vipinfunctionapp'
 
   # Agent VM image name
-  vmImageName: 'vs2017-win2016'
+  #storage
+  storage: 'demostorageacnt'
 
-  # Working Directory
-  workingDirectory: '$(System.DefaultWorkingDirectory)/AzureKeyVault'
+  #container
+  ContainerName: '$web'
+
+  # Agent VM image name
+  vmImageName: 'windows-latest'
+
+  # Working Directory for function app
+  functionAppworkingDirectory: '$(System.DefaultWorkingDirectory)/AzureKeyVault'
+
+  # Working Directory for Angular
+  angularWorkingDirectory: '$(System.DefaultWorkingDirectory)/AzureWeb'
+
+  #Setting the configuration.baseApiUrl variables key
+  # configuration.baseApiUrlKey: 'configuration.baseApiUrl' 
+
+  #Setting the configuration.baseApiUrlValue variables key
+  configuration.baseApiUrl: 'https://vipinfunctionapp.azurewebsites.net' 
 
 stages:
 - stage: Build
@@ -28,20 +44,24 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
-
     steps:
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: '**/*.sln'
+        feedsToUse: 'select'
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: 'build'
         projects: |
-          $(workingDirectory)/*.csproj
-        arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration Release
+          $(functionAppworkingDirectory)/*.csproj
+        arguments: --output $(functionAppworkingDirectory)/publish_output --configuration Release
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/publish_output'
+        rootFolderOrFile: '$(functionAppworkingDirectory)/publish_output'
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -49,6 +69,7 @@ stages:
 
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
+
 
 - stage: Deploy
   displayName: Deploy stage
@@ -74,3 +95,50 @@ stages:
               appType: functionApp
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+
+- stage: Angular
+  jobs:
+  - job: Job
+    pool:
+      vmImage: windows-latest
+    steps:
+    - task: FileTransform@1
+      displayName: 'File Transform: '
+      inputs:
+        folderPath: $(angularWorkingDirectory)/src/assets/data
+        fileType: json
+        targetFiles: /app.config.json
+      
+
+    - bash: |
+        echo "##vso[task.setvariable variable=configuration.baseApiUrl]$(configuration.baseApiUrl)"
+    
+    - task: NodeTool@0
+      inputs:
+        versionSpec: 10.x
+      displayName: Install Node.js
+    - task: CmdLine@2
+      displayName: npm install -g @angular/cli
+      inputs:
+        script: >
+          npm install -g @angular/cli
+    - task: CmdLine@2
+      displayName: npm install
+      inputs:
+        script: >
+          npm install
+        workingDirectory: $(angularWorkingDirectory)
+    - task: CmdLine@2
+      displayName: ng build --prod
+      inputs:
+        script: >
+          ng build --prod
+        workingDirectory: $(angularWorkingDirectory)
+    - task: AzureFileCopy@3
+      inputs:
+        SourcePath: $(angularWorkingDirectory)/dist
+        azureSubscription: $(azureSubscription)
+        Destination: AzureBlob
+        storage: $(storage)
+        ContainerName: $(ContainerName)
+        cleanTargetBeforeCopy: true

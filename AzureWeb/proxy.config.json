@@ -1,8 +1,7 @@
 {
   "/api/*": {
-    "target": "https://demofunctionappnitor.azurewebsites.net/",
+    "target": "http://localhost:7071/",
     "secure": false,
     "logLevel": "debug"
   }
 }
-

@@ -17,11 +17,11 @@ export class AppComponent implements OnInit {
   fileToUpload: File = null;
   secretFileData: IDataList[];
   exportedSecrets: IDataList[];
-  
+
 
   constructor(private broadcastService: BroadcastService, private formBuilder: FormBuilder, private appService: AppService) {
   }
-  ngOnInit() {    
+  ngOnInit() {
     this.secretFileData = [];
     this.exportedSecrets = [];
     this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
@@ -31,14 +31,14 @@ export class AppComponent implements OnInit {
       sessionStorage.setItem('token', payload.token);
     });
     this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
-    //  console.log(payload);
+      //  console.log(payload);
     });
-    this.credentialsForm =  this.formBuilder.group({
-      clientID: ['', [Validators.required]],
-      tenantID: ['', [Validators.required]],
-      secretKey: ['', [Validators.required]],
-      keyVaultBaseUrl: ['', [Validators.required]]
-  });
+    this.credentialsForm = this.formBuilder.group({
+      clientID: ['41b880e0-6223-452c-a498-62d0633974fc', [Validators.required]],
+      tenantID: ['8c3dad1d-b6bc-4f8b-939b-8263372eced6', [Validators.required]],
+      secretKey: ['key', [Validators.required]],
+      keyVaultBaseUrl: ['https://vipinkeyvaultdemo.vault.azure.net/', [Validators.required]]
+    });
   }
 
   exportSecrets() {
@@ -46,61 +46,61 @@ export class AppComponent implements OnInit {
     this.exportedSecrets = [];
     const exportKeysReq: IAzureKeyManager = {
       clientID: this.credentialsForm.controls.clientID.value.trim(),
-      tenantID : this.credentialsForm.controls.tenantID.value.trim(),
+      tenantID: this.credentialsForm.controls.tenantID.value.trim(),
       keyVaultBaseUrl: this.credentialsForm.controls.keyVaultBaseUrl.value.trim(),
       secretKey: this.credentialsForm.controls.secretKey.value.trim(),
-      };
+    };
     this.appService.exportSecrets(exportKeysReq).subscribe(resp => {
       if (resp) {
         console.log(resp);
-        this.exportedSecrets =  resp;
+        this.exportedSecrets = resp;
       }
       // this.appService.showErrorMessage('Error occured, Please contact admin');
     });
-      }
+  }
 
-      selectFile(files: FileList) {
-        this.secretFileData = [];
-        this.exportedSecrets = [];
-        if (files.item(0).type !== 'application/json') {
-          return ;
-        }
-        this.fileToUpload = files.item(0);
-        const fileReader = new FileReader();
-        fileReader.readAsText(this.fileToUpload, 'UTF-8');
-        fileReader.onload = () => {
-        this.secretFileData =  JSON.parse(fileReader.result.toString());
-        };
-        fileReader.onerror = (error) => {
-        console.log(error);
-        this.appService.showErrorMessage('Error occured while reading json file');
+  selectFile(files: FileList) {
+    this.secretFileData = [];
+    this.exportedSecrets = [];
+    if (files.item(0).type !== 'application/json') {
+      return;
+    }
+    this.fileToUpload = files.item(0);
+    const fileReader = new FileReader();
+    fileReader.readAsText(this.fileToUpload, 'UTF-8');
+    fileReader.onload = () => {
+      this.secretFileData = JSON.parse(fileReader.result.toString());
     };
-        if (!(this.secretFileData.length > 0)) {
+    fileReader.onerror = (error) => {
+      console.log(error);
+      this.appService.showErrorMessage('Error occured while reading json file');
+    };
+    if (!(this.secretFileData.length > 0)) {
       this.appService.showErrorMessage('Error occured while reading json file');
 
     }
-    }
+  }
 
-      importSecrets() {
-        if (this.secretFileData.length <= 0) {
-          return;
+  importSecrets() {
+    if (this.secretFileData.length <= 0) {
+      return;
+    }
+    const importKeysReq: IAzureKeyManager = {
+      clientID: this.credentialsForm.controls.clientID.value.trim(),
+      tenantID: this.credentialsForm.controls.tenantID.value.trim(),
+      keyVaultBaseUrl: this.credentialsForm.controls.keyVaultBaseUrl.value.trim(),
+      secretKey: this.credentialsForm.controls.secretKey.value.trim(),
+      submitSecrets: this.secretFileData,
+    };
+    if (importKeysReq.submitSecrets.length > 0) {
+      this.appService.importSecrets(importKeysReq).subscribe(resp => {
+        if (resp) {
+          console.log(resp);
+          this.secretFileData = [];
         }
-        const importKeysReq: IAzureKeyManager = {
-          clientID: this.credentialsForm.controls.clientID.value.trim(),
-          tenantID : this.credentialsForm.controls.tenantID.value.trim(),
-          keyVaultBaseUrl: this.credentialsForm.controls.keyVaultBaseUrl.value.trim(),
-          secretKey: this.credentialsForm.controls.secretKey.value.trim(),
-          submitSecrets: this.secretFileData,
-          };
-        if (importKeysReq.submitSecrets.length > 0) {
-        this.appService.importSecrets(importKeysReq).subscribe(resp => {
-          if (resp) {
-            console.log(resp);
-            this.secretFileData = [];
-          }
         //  this.appService.showErrorMessage('Error occured, Please contact admin');
-        });
-}
+      });
     }
   }
+}
 

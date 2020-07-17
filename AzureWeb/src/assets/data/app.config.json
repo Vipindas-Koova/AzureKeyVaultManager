@@ -1,0 +1,5 @@
+{
+    "configuration": {
+        "baseApiUrl": "http://localhost:4200"
+    }
+}
