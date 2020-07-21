@@ -48,10 +48,10 @@ export class AppComponent implements OnInit {
     //   console.log(JSON.stringify(payload));
     // });
     this.credentialsForm = this.formBuilder.group({
-      clientID: ['1f34ca64-8587-4647-83f5-88fa457d6b41', [Validators.required]],
-      tenantID: ['8c3dad1d-b6bc-4f8b-939b-8263372eced6', [Validators.required]],
-      secretKey: ['4a8bYXWq3_VFPBwVApRu1698-rAl~_N6--', [Validators.required]],
-      keyVaultBaseUrl: ['https://azure-server-less.vault.azure.net/', [Validators.required]]
+      clientID: ['', [Validators.required]],
+      tenantID: ['', [Validators.required]],
+      secretKey: ['', [Validators.required]],
+      keyVaultBaseUrl: ['', [Validators.required]]
     });
   }
 
