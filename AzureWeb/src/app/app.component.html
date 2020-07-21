@@ -8,39 +8,31 @@
 </div>
 <div class="container-fluid top-section">
   <div class="card m-3">
-    <h5 class="card-header">Export Secrets</h5>
+    <h5 class="card-header">Set Configuration</h5>
     <div class="card-body">
       <form [formGroup]="credentialsForm">
         <div class="row">
           <div class="form-group col-md-6">
-            <label>Client ID</label>
-            <input type="text" formControlName="clientID" class="form-control control-box"
-              [ngClass]="{'alert alert-danger': credentialsForm.get('clientID').hasError('required')}" />
-            <span *ngIf="credentialsForm.get('clientID').hasError('required')" class="text-danger">Client ID is
-              required</span>
+            <label>Client ID<span class="red-color">*</span></label>
+            <input type="text" id="clientID" formControlName="clientID" class="form-control control-box"
+              [ngClass]="{'alert alert-danger': credentialsForm.get('clientID').touched && credentialsForm.get('clientID').hasError('required')}" />
           </div>
           <div class="form-group col-md-6">
-            <label>Tenant ID</label>
+            <label>Tenant ID<span class="red-color">*</span></label>
             <input type="text" formControlName="tenantID" class="form-control control-box"
-              [ngClass]="{'alert alert-danger': credentialsForm.get('tenantID').hasError('required')}" />
-            <span *ngIf="credentialsForm.get('tenantID').hasError('required')" class="text-danger">TenantID is required
-            </span>
+              [ngClass]="{'alert alert-danger': credentialsForm.get('tenantID').touched && credentialsForm.get('tenantID').hasError('required')}" />
           </div>
         </div>
         <div class="row">
           <div class="form-group col-md-6">
-            <label>keyVault Base Url</label>
+            <label>keyVault Base Url<span class="red-color">*</span></label>
             <input type="text" formControlName="keyVaultBaseUrl" class="form-control control-box"
-              [ngClass]="{'alert alert-danger': credentialsForm.get('keyVaultBaseUrl').hasError('required')}" />
-            <span *ngIf="credentialsForm.get('keyVaultBaseUrl').hasError('required')" class="text-danger">keyVault Base
-              Url is required</span>
+              [ngClass]="{'alert alert-danger': credentialsForm.get('keyVaultBaseUrl').touched && credentialsForm.get('keyVaultBaseUrl').hasError('required')}" />
           </div>
           <div class="form-group col-md-6">
-            <label>Secret Key</label>
+            <label>Secret Key<span class="red-color">*</span></label>
             <input type="text" formControlName="secretKey" class="form-control control-box"
-              [ngClass]="{'alert alert-danger': credentialsForm.get('secretKey').hasError('required')}" />
-            <span *ngIf="credentialsForm.get('secretKey').hasError('required')" class="text-danger">Secret Key is
-              required</span>
+              [ngClass]="{'alert alert-danger': credentialsForm.get('secretKey').touched && credentialsForm.get('secretKey').hasError('required')}" />
           </div>
         </div>
       </form>
