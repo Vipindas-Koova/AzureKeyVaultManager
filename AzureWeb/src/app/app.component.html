@@ -66,20 +66,18 @@
     <div class="card-body">
       <div class="form-row">
         <div class="form-group col-6">
-          <input type="file" id="file" accept="application/JSON" [disabled]="!credentialsForm.valid"
+          <input #myInput type="file" id="file" accept="application/JSON" [disabled]="!credentialsForm.valid"
             (change)="selectFile($event.target.files)">
         </div>
         <table class="table" *ngIf="secretFileData.length">
           <thead class="thead-light">
             <tr>
               <th>Secret Name</th>
-              <th>Secret Type</th>
               <th>Secret Value</th>
           </thead>
           <tbody>
             <tr *ngFor="let item of secretFileData; let i = index">
               <td>{{item.secretname}}</td>
-              <td>{{item.secrettype}}</td>
               <td>{{item.secretvalue}}</td>
             </tr>
           </tbody>

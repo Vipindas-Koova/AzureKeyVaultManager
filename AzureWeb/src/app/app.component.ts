@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ViewChild } from '@angular/core';
 
 import { AppService } from './service/app.service';
 import { IAzureKeyManager, IDataList } from './model/index';
@@ -17,9 +18,11 @@ export class AppComponent implements OnInit {
   fileToUpload: File = null;
   secretFileData: IDataList[];
   exportedSecrets: IDataList[];
+  @ViewChild('myInput', null)
+  myInputVariable: ElementRef;
 
 
-  constructor( private formBuilder: FormBuilder, private appService: AppService) {
+  constructor(private formBuilder: FormBuilder, private appService: AppService) {
   }
   ngOnInit() {
     this.secretFileData = [];
@@ -45,10 +48,10 @@ export class AppComponent implements OnInit {
     //   console.log(JSON.stringify(payload));
     // });
     this.credentialsForm = this.formBuilder.group({
-      clientID: ['', [Validators.required]],
-      tenantID: ['', [Validators.required]],
-      secretKey: ['', [Validators.required]],
-      keyVaultBaseUrl: ['', [Validators.required]]
+      clientID: ['1f34ca64-8587-4647-83f5-88fa457d6b41', [Validators.required]],
+      tenantID: ['8c3dad1d-b6bc-4f8b-939b-8263372eced6', [Validators.required]],
+      secretKey: ['4a8bYXWq3_VFPBwVApRu1698-rAl~_N6--', [Validators.required]],
+      keyVaultBaseUrl: ['https://azure-server-less.vault.azure.net/', [Validators.required]]
     });
   }
 
@@ -81,15 +84,14 @@ export class AppComponent implements OnInit {
     fileReader.readAsText(this.fileToUpload, 'UTF-8');
     fileReader.onload = () => {
       this.secretFileData = JSON.parse(fileReader.result.toString());
+      if (!(this.secretFileData.length > 0)) {
+        this.appService.showErrorMessage('Error occured while reading json file');
+      }
     };
     fileReader.onerror = (error) => {
       console.log(error);
       this.appService.showErrorMessage('Error occured while reading json file');
     };
-    if (!(this.secretFileData.length > 0)) {
-      this.appService.showErrorMessage('Error occured while reading json file');
-
-    }
   }
 
   importSecrets() {
@@ -107,7 +109,9 @@ export class AppComponent implements OnInit {
       this.appService.importSecrets(importKeysReq).subscribe(resp => {
         if (resp) {
           console.log(resp);
+          this.appService.showSuccessMessage('Keys imported successfully');
           this.secretFileData = [];
+          this.myInputVariable.nativeElement.value = '';
         }
         //  this.appService.showErrorMessage('Error occured, Please contact admin');
       });

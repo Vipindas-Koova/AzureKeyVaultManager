@@ -1,0 +1,10 @@
+[
+ {
+ "secretname":"Secret5",
+ "secretvalue":"Secret 5"
+ },
+ {
+ "secretname":"Secret6",
+ "secretvalue":"Secret 6"
+ }
+]
