@@ -22,10 +22,10 @@ Storage Account
 
 1. azure-pipelines.yml file in the project can be used to automate deployment. You can use Azure devops yml pipeline for deployment
 2. This file deploys both angular as well as API on Azure static website and function app respectively.
-3. Following properties needs to be modified in azure-pipelines.yml:
- a. azureSubscription = "Your Azure Subscription"
- b. functionAppName = "Name of function app you created in the above subscription"
- c. storage = "Name of storage account"
- d. configuration.baseApiUrl = "URI of your function app"
- e. configuration.authority = "https://login.microsoftonline.com/{tenantId of your function app}"
- f. configuration.redirectUri = "URI of your angular app"
+3. Following properties needs to be modified in azure-pipelines.yml:<br />
+ a azureSubscription = "Your Azure Subscription"<br />
+ b functionAppName = "Name of function app you created in the above subscription"<br />
+ c. storage = "Name of storage account"<br />
+ d. configuration.baseApiUrl = "URI of your function app"<br />
+ e. configuration.authority = "https://login.microsoftonline.com/{tenantId of your function app}"<br />
+ f. configuration.redirectUri = "URI of your angular app"<br />
