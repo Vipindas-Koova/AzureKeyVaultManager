@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  clientID: '41b880e0-6223-452c-a498-62d0633974fc',
-  authority: 'https://login.microsoftonline.com/8c3dad1d-b6bc-4f8b-939b-8263372eced6',
+  clientID: '1f34ca64-8587-4647-83f5-88fa457d6b41',
+  authority: 'https://login.microsoftonline.com/8c3dad1d-b6bc-4f8b-939b-8263372yuuu6',
   redirectUri: 'http://localhost:4200/'
 };
 

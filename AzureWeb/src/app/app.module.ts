@@ -5,7 +5,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
-import { MsalModule } from '@azure/msal-angular';
+import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,26 +20,34 @@ import { ConfigProvider } from './core.module/services';
   declarations: [
     AppComponent
   ],
-  imports: [
-    MsalModule.forRoot({
-      clientID: environment.clientID,
-      authority: environment.authority,
-      redirectUri: environment.redirectUri,
-      cacheLocation: 'sessionStorage',
-      validateAuthority: true,
-      navigateToLoginRequestUrl: true,
-    }),
-    BrowserModule,
+  imports: [BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
-    CoreModule.forRoot()
-  ],
+    CoreModule.forRoot(),
+    MsalModule.forRoot({
+      auth: {
+        clientId: environment.clientID,
+        authority: environment.authority,
+        redirectUri: environment.redirectUri,
+        navigateToLoginRequestUrl: true
+      },
+      cache: {
+        cacheLocation: 'localStorage'
+      }
+    },
+      {
+        popUp: false,
+        consentScopes: [
+          'openid', 'api://1f34ca64-8587-4647-83f5-88fa457d6b41/rishu_demo'],
+        protectedResourceMap:
+          [['https://demofunctionappnitor.azurewebsites.net', ['api://1f34ca64-8587-4647-83f5-88fa457d6b41/rishu_demo']]]
+      })],
   bootstrap: [AppComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
   ],
 })
 export class AppModule { }

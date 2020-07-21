@@ -8,10 +8,10 @@ trigger:
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'a3108991-8538-4228-ad58-1b9ed45653af'
+  azureSubscription: ''
 
   # Function app name
-  functionAppName: 'vipinfunctionapp'
+  functionAppName: ''
 
   # Agent VM image name
   #storage
@@ -33,7 +33,10 @@ variables:
   # configuration.baseApiUrlKey: 'configuration.baseApiUrl' 
 
   #Setting the configuration.baseApiUrlValue variables key
-  configuration.baseApiUrl: 'https://vipinfunctionapp.azurewebsites.net' 
+  configuration.baseApiUrl: '' 
+  configuration.baseApiUrl: '' 
+  configuration.baseApiUrl: '' 
+  configuration.baseApiUrl: '' 
 
 stages:
 - stage: Build
@@ -112,6 +115,9 @@ stages:
 
     - bash: |
         echo "##vso[task.setvariable variable=configuration.baseApiUrl]$(configuration.baseApiUrl)"
+        echo "##vso[task.setvariable variable=configuration.clientID]$(configuration.clientID)"
+        echo "##vso[task.setvariable variable=configuration.authority]$(configuration.authority)"
+        echo "##vso[task.setvariable variable=configuration.redirectUri]$(configuration.redirectUri)"
     
     - task: NodeTool@0
       inputs:

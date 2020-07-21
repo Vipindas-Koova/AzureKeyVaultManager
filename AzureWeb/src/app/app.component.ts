@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { BroadcastService } from '@azure/msal-angular';
+import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AppService } from './service/app.service';
@@ -19,25 +19,36 @@ export class AppComponent implements OnInit {
   exportedSecrets: IDataList[];
 
 
-  constructor(private broadcastService: BroadcastService, private formBuilder: FormBuilder, private appService: AppService) {
+  constructor( private formBuilder: FormBuilder, private appService: AppService) {
   }
   ngOnInit() {
     this.secretFileData = [];
     this.exportedSecrets = [];
-    this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-      // do something here
-      console.log(payload);
-      // console.log(payload["token"]);
-      sessionStorage.setItem('token', payload.token);
-    });
-    this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
-      //  console.log(payload);
-    });
+    // this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+    //   // do something here
+    //   debugger;
+    //   console.log(JSON.stringify(payload));
+    //   // console.log(payload["token"]);
+    //   // const user = this.msalService.getUser();
+    //   // this.msalService.acquireTokenSilent(['d93de0aa-af9b-47f2-b1b6-5bff81d61001'],
+    //   // 'https://login.microsoftonline.com/8c3dad1d-b6bc-4f8b-939b-8263372eced6', user
+    //   // );
+    //   sessionStorage.setItem('token', payload.token);
+    // });
+    // this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
+    //   console.log(JSON.stringify(payload));
+    //   sessionStorage.setItem('token', payload.token);
+    // });
+
+    // this.broadcastService.subscribe('msal:acquireTokenFailure', payload => {
+    //   // do something here
+    //   console.log(JSON.stringify(payload));
+    // });
     this.credentialsForm = this.formBuilder.group({
-      clientID: ['41b880e0-6223-452c-a498-62d0633974fc', [Validators.required]],
-      tenantID: ['8c3dad1d-b6bc-4f8b-939b-8263372eced6', [Validators.required]],
-      secretKey: ['key', [Validators.required]],
-      keyVaultBaseUrl: ['https://vipinkeyvaultdemo.vault.azure.net/', [Validators.required]]
+      clientID: ['', [Validators.required]],
+      tenantID: ['', [Validators.required]],
+      secretKey: ['', [Validators.required]],
+      keyVaultBaseUrl: ['', [Validators.required]]
     });
   }
 
