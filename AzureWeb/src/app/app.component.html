@@ -50,13 +50,11 @@
             <tr>
               <th>Secret Name</th>
               <th>Secret Type</th>
-              <th>Secret Value</th>
           </thead>
           <tbody>
             <tr *ngFor="let item of exportedSecrets; let i = index">
               <td>{{item.secretname}}</td>
               <td>{{item.secrettype}}</td>
-              <td>{{item.secretvalue}}</td>
             </tr>
           </tbody>
         </table>
