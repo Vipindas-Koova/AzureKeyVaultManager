@@ -26,8 +26,11 @@ export class ConfigProvider {
                 return Observable.throw(error.json().error || 'Server error');
             }))
                 .subscribe(async (responseData: any) => {
-                    this.config = responseData['configuration'];
-                    BaseConstants.baseUrl = this.config['baseApiUrl'];
+                    this.config = responseData.configuration;
+                    BaseConstants.baseUrl = this.config.baseApiUrl;
+                    BaseConstants.redirectUri = this.config.redirectUri;
+                    BaseConstants.clientId = this.config.clientID;
+                    BaseConstants.authority = this.config.authority;
                     resolve(true);
                 });
         });
