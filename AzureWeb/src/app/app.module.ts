@@ -5,15 +5,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
-import { MsalModule, MsalInterceptor, MsalService, MSAL_CONFIG } from '@azure/msal-angular';
+import { MsalModule, MsalInterceptor, MsalService, MSAL_CONFIG, MsalAngularConfiguration, MSAL_CONFIG_ANGULAR } from '@azure/msal-angular';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptor/TokenInterceptor';
+import { ConfigProvider } from './core.module/services';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule, BaseConstants } from './core.module';
-import { ConfigProvider } from './core.module/services';
-
+import { Configuration } from 'msal';
 
 
 @NgModule({
@@ -27,36 +27,52 @@ import { ConfigProvider } from './core.module/services';
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
     CoreModule.forRoot(),
-    MsalModule.forRoot({
-      auth: {
-        clientId: environment.clientID,
-        authority: environment.authority,
-        redirectUri: environment.redirectUri,
-        navigateToLoginRequestUrl: true
-      },
-      cache: {
-        cacheLocation: 'localStorage'
-      }
-    },
-        {
-          popUp: false,
-          consentScopes: [
-            'openid']
-          // protectedResourceMap:
-          //   [['https://demofunctionappnitor.azurewebsites.net', ['api://1f34ca64-8587-4647-83f5-88fa457d6b41/rishu_demo']]]
-        }
-    )],
+    MsalModule],
   bootstrap: [AppComponent],
-  providers: [
-    // MsalService,
-    // {
-    //   provide: MSAL_CONFIG,
-    //   useValue: getConfig()
-    // },
+  providers: [ConfigProvider,
+    { provide: APP_INITIALIZER, useFactory: appConfigServiceFactory, deps: [ConfigProvider], multi: true },
+    {
+      provide: MSAL_CONFIG,
+      useFactory: msalConfigFactory,
+      deps: [ConfigProvider]
+  },
+  {
+    provide: MSAL_CONFIG_ANGULAR,
+    useFactory: msalAngularConfigFactory,
+    deps: [ConfigProvider]
+},
+MsalService
     // { provide: HTTP_INTERCEPTORS, useClass: htt, multi: true },
   ],
 })
 export class AppModule { }
+
+export function appConfigServiceFactory(config: ConfigProvider): any {
+  return () => config.load();
+}
+
+export function msalConfigFactory(config: ConfigProvider): Configuration {
+  debugger;
+  const auth = {
+      auth: {
+          clientId: config.getConfig('clientID'),
+          authority: config.getConfig('authority'),
+          redirectUri: config.getConfig('redirectUri')
+      },
+      cache: {
+          cacheLocation: 'localStorage'
+      }
+  };
+  return (auth as Configuration);
+}
+export function msalAngularConfigFactory(): MsalAngularConfiguration {
+  const auth = {
+      unprotectedResources: [],
+      protectedResourceMap: [],
+  };
+  return (auth as MsalAngularConfiguration);
+}
+
 // export function getConfig() {
 //   const obj = {
 //     auth: {

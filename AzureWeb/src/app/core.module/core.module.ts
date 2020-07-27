@@ -27,16 +27,16 @@ export class CoreModule {
   }
   public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: CoreModule,
-      providers: [ConfigProvider,
-        { provide: APP_INITIALIZER, useFactory: appConfigServiceFactory, deps: [ConfigProvider], multi: true }
-      ]
+      ngModule: CoreModule
+      // providers: [ConfigProvider,
+      //   { provide: APP_INITIALIZER, useFactory: appConfigServiceFactory, deps: [ConfigProvider], multi: true }
+      // ]
     };
   }
 }
 
-export function appConfigServiceFactory(config: ConfigProvider): any {
-  return () => config.load();
-}
+// export function appConfigServiceFactory(config: ConfigProvider): any {
+//   return () => config.load();
+// }
 
 export { BaseConstants } from './constants';

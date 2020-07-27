@@ -1,5 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 import { map, catchError } from 'rxjs/operators';
 
@@ -20,19 +22,21 @@ export class ConfigProvider {
     }
 
     public load() {
-        return new Promise((resolve, reject) => {
-            this.http.get('./assets/data/app.config.json').pipe(map((res: any) => res)).pipe(catchError((error: any) => {
-                reject();
-                return Observable.throw(error.json().error || 'Server error');
-            }))
-                .subscribe(async (responseData: any) => {
-                    this.config = responseData.configuration;
-                    BaseConstants.baseUrl = this.config.baseApiUrl;
-                    BaseConstants.redirectUri = this.config.redirectUri;
-                    BaseConstants.clientId = this.config.clientID;
-                    BaseConstants.authority = this.config.authority;
-                    resolve(true);
-                });
-        });
-    }
+            return new Promise((resolve, reject) => {
+                this.http.get('./assets/data/app.config.json')
+                    .catch((error: any) => {
+                        reject();
+                        return Observable.throw(error.json().error || 'Server error');
+                    })
+                    .subscribe((responseData: any) => {
+                        this.config = responseData.configuration;
+                        BaseConstants.baseUrl = this.config.baseApiUrl;
+                        BaseConstants.redirectUri = this.config.redirectUri;
+                        BaseConstants.clientId = this.config.clientID;
+                        BaseConstants.authority = this.config.authority;
+                        resolve(true);
+                    });
+            });
+
+        }
 }
