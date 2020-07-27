@@ -4,19 +4,23 @@ This application also includes Azure AD authentication for angular.
 
 # Initial Set Up
 
-App Registration and Function App 
-1. Create a new app registration in Azure AD.
-2. Give your app a clear readable name.
-3. Select the supported accounts : Single Tenant – Only accounts from the current Azure AD instance will be able to sign in.
-4. Enter the redirect URI. This is the URI of the application where angular app is hosted.
-5. After saving please note the Client Id as well as tenant Id of your application.
-6. Create a new function app in azure.
 
 Storage Account
 1. Create a new storage account in Azure.
 2. Go to Static website Tab in your storage account and enable static website.
 3. Set Index document name as index.html.
 4. A new container named $web will be created in your storage account.
+5. Copy the primary and secondary end points
+
+App Registration and Function App 
+1. Create a new app registration in Azure AD.
+2. Give your app a clear readable name.
+3. Select the supported accounts : Single Tenant – Only accounts from the current Azure AD instance will be able to sign in.
+4. Enter the redirect URI. This is the URI of the application where angular app is hosted.
+5. After saving please note the Client Id as well as tenant Id of your application.
+6. Create a new function app in azure in .Net core stack.
+7. Copy the url of your function app.
+
 
 # Project set up and deployment
 
@@ -28,4 +32,4 @@ Storage Account
  c. storage = "Name of storage account"<br />
  d. configuration.baseApiUrl = "URI of your function app"<br />
  e. configuration.authority = "https://login.microsoftonline.com/{tenantId of your function app}"<br />
- f. configuration.redirectUri = "URI of your angular app"<br />
+ f. configuration.redirectUri = "URI of your static app"<br />
