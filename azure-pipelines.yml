@@ -34,9 +34,9 @@ variables:
 
   #Setting the configuration.baseApiUrlValue variables key
   configuration.baseApiUrl: '' 
-  configuration.baseApiUrl: '' 
-  configuration.baseApiUrl: '' 
-  configuration.baseApiUrl: '' 
+  configuration.clientID: '' 
+  configuration.authority: '' 
+  configuration.redirectUri: '' 
 
 stages:
 - stage: Build
