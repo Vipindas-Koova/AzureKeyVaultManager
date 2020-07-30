@@ -36,3 +36,7 @@ App Registration and Function App
  d. configuration.baseApiUrl = "URI of your function app"<br />
  e. configuration.authority = "https://login.microsoftonline.com/{tenantId of your function app}"<br />
  f. configuration.redirectUri = "URI of your static app"<br />
+ 
+# Notes:
+1. The application that you have registered must have access to your azure key vault. You can give access under access policy under azure key vault
+2. Secret key required to export secret can be generated using Certifivcates and Secrets tab under your registered App in app registrations
