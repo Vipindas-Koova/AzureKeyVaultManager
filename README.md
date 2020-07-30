@@ -28,7 +28,7 @@ App Registration and Function App
 
 1. azure-pipelines.yml file in the project can be used to automate deployment. You can use Azure devops yml pipeline for deployment
 2. This file deploys both angular as well as API on Azure static website and function app respectively.
-3. If your repo is in Github, you need to add a service connection in azure devops project settings that points to your subscription and resource group (in which you have    created storage account and function app). Please copy the sonnection name
+3. If your repo is in Github, you need to add a service connection in azure devops project settings that points to your subscription and resource group (in which you have    created storage account and function app). Please copy the connection name
 3. Following properties needs to be modified in azure-pipelines.yml:<br />
  a azureSubscription = "Service Connection Name that you created previously"<br />
  b functionAppName = "Name of function app you created in the above subscription"<br />
