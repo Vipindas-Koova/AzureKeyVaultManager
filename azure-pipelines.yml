@@ -9,11 +9,11 @@ variables:
   azureSubscription: 'b4800fe5-b55d-42a6-9b5b-92ba5b18811c'
 
   # Function app name
-  functionAppName: 'autodeploytest'
+  functionAppName: 'AzureKeyVaultFunctionApp1'
 
   # Agent VM image name
   #storage
-  storage: 'autodeploytestdemo'
+  storage: 'azurekeyvaultstorageacct'
 
   #container
   ContainerName: '$web'
@@ -31,10 +31,10 @@ variables:
   # configuration.baseApiUrlKey: 'configuration.baseApiUrl' 
 
   #Setting the configuration.baseApiUrlValue variables key
-  configuration.baseApiUrl: 'https://autodeploytest.azurewebsites.net' 
-  configuration.clientID: '6ce4513b-5e2b-4fa2-8ec6-7f156f5fabe9' 
+  configuration.baseApiUrl: 'https://azurekeyvaultfunctionapp1.azurewebsites.net'
+  configuration.clientID: '8cd6319f-258c-4a1d-a522-29419d16debb' 
   configuration.authority: 'https://login.microsoftonline.com/8c3dad1d-b6bc-4f8b-939b-8263372eced6' 
-  configuration.redirectUri: 'https://autodeploytestdemo.z13.web.core.windows.net' 
+  configuration.redirectUri: 'https://azurekeyvaultfunctionapp1.azurewebsites.net' 
 
 stages:
 - stage: Build
